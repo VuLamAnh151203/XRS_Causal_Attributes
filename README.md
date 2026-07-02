@@ -3,6 +3,16 @@
 This repository packages the full explainable recommendation pipeline around
 causal item attributes.
 
+## Stage Overview
+
+1. `attribute_pipeline`: extracts item attributes from item profiles, embeds
+   and clusters them, then builds the canonical attribute vocabulary.
+2. `extract_causal_attributes`: trains LightGCN, builds supported attributes
+   for each user-item pair, runs interventions, and recovers causal attributes
+   with OMP.
+3. `causal_joint_training`: trains the final recommendation/explanation model
+   using the recovered causal attribute labels.
+
 The main flow is:
 
 ```text
