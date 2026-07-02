@@ -8,8 +8,9 @@ causal item attributes.
 1. `attribute_pipeline`: extracts item attributes from item profiles, embeds
    and clusters them, then builds the canonical attribute vocabulary.
 2. `extract_causal_attributes`: trains LightGCN, builds supported attributes
-   for each user-item pair, runs interventions, and recovers causal attributes
-   with OMP.
+   for each user-item pair, then extracts causal attributes. The default mode
+   uses intervention matrices plus OMP; the optional direct mode chooses causal
+   attributes directly from perturbation score drops without OMP.
 3. `causal_joint_training`: trains the final recommendation/explanation model
    using the recovered causal attribute labels.
 
@@ -114,6 +115,19 @@ Because Step 1 is already included, the usual next command is:
 SKIP_ATTRIBUTES=1 bash run_full_pipeline.sh
 ```
 
+To use direct perturbation instead of intervention + OMP:
+
+```bash
+SKIP_ATTRIBUTES=1 CAUSAL_MODE=direct bash run_full_pipeline.sh
+```
+
+Direct mode stops after causal-label extraction by default. To train with those
+direct labels, run:
+
+```bash
+CONFIG_PATH=causal_joint_training/config_direct.yaml bash scripts/run_joint_training.sh
+```
+
 For development smoke runs, combine limits:
 
 ```bash
@@ -161,7 +175,7 @@ The main downstream files are:
 
 ## Stage 2: Extract Causal Attributes
 
-Run the full causal-attribute stage:
+Run the default OMP causal-attribute stage:
 
 ```bash
 bash scripts/run_causal_attributes.sh
@@ -219,6 +233,52 @@ Use the configs under `configs/amazon/` for the main training pipeline. Some
 copied default configs are useful for test/report runs and may point at `tst`
 artifacts.
 
+### Direct Perturbation Mode Without OMP
+
+Direct mode skips intervention matrices and OMP. It directly removes the support
+items for each candidate target attribute, measures the LightGCN score drop,
+then chooses the top positive score-drop attributes as causal attributes.
+
+Run:
+
+```bash
+CAUSAL_MODE=direct bash scripts/run_causal_attributes.sh
+```
+
+Equivalent direct runner:
+
+```bash
+bash scripts/run_direct_causal_attributes.sh
+```
+
+Useful overrides:
+
+```bash
+DIRECT_TOP_K=5 bash scripts/run_direct_causal_attributes.sh
+DIRECT_PROPAGATION_MODE=full bash scripts/run_direct_causal_attributes.sh
+DIRECT_MIN_SCORE_DROP=0.001 bash scripts/run_direct_causal_attributes.sh
+```
+
+Direct mode outputs:
+
+```text
+extract_causal_attributes/direct_perturbation/artifacts/amazon/
+|-- direct_attribute_drop_effects.json
+|-- direct_causal_attributes.jsonl
+|-- summary.json
+`-- direct_omp_compatible/
+    |-- manifest.jsonl
+    |-- summary.json
+    |-- run_config.json
+    |-- vocabulary.json
+    `-- shards/direct_vectors_000000.npz
+```
+
+`direct_causal_attributes.jsonl` is the human-readable direct result. The
+`direct_omp_compatible/` directory has the same sparse-label layout expected by
+`causal_joint_training`, but the coefficients are direct score drops rather
+than OMP coefficients.
+
 ## What Is A Causal Attribute Label?
 
 For each user-item explanation pair, the support builder finds target
@@ -258,6 +318,12 @@ python -m causal_joint_training.preflight
 python -m causal_joint_training.train
 python -m causal_joint_training.evaluate
 python -m causal_joint_training.generate --split test
+```
+
+For direct perturbation labels, use:
+
+```bash
+CONFIG_PATH=causal_joint_training/config_direct.yaml bash scripts/run_joint_training.sh
 ```
 
 Outputs:

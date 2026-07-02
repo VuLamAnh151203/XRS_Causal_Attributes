@@ -10,6 +10,7 @@ venv/
 
 # Generated pipeline artifacts after bundled Step 1
 extract_causal_attributes/artifacts/
+extract_causal_attributes/direct_perturbation/artifacts/
 extract_causal_attributes/lightgcn_cf/artifacts/
 extract_causal_attributes/intervention/artifacts/
 extract_causal_attributes/intervention/omp/artifacts/

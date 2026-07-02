@@ -7,6 +7,7 @@ cd "${REPO_ROOT}"
 
 PYTHON_BIN="${PYTHON_BIN:-python}"
 OVERWRITE="${OVERWRITE:---overwrite}"
+CAUSAL_MODE="${CAUSAL_MODE:-omp}"
 
 SKIP_LIGHTGCN="${SKIP_LIGHTGCN:-0}"
 SKIP_SUPPORT="${SKIP_SUPPORT:-0}"
@@ -16,6 +17,16 @@ SKIP_OMP="${SKIP_OMP:-0}"
 SUPPORT_LIMIT="${SUPPORT_LIMIT:-}"
 INTERVENTION_LIMIT="${INTERVENTION_LIMIT:-}"
 OMP_LIMIT="${OMP_LIMIT:-}"
+LIGHTGCN_CONFIG="${LIGHTGCN_CONFIG:-extract_causal_attributes/lightgcn_cf/config.yaml}"
+
+if [[ "${CAUSAL_MODE}" == "direct" ]]; then
+  exec bash scripts/run_direct_causal_attributes.sh
+fi
+
+if [[ "${CAUSAL_MODE}" != "omp" ]]; then
+  echo "Error: CAUSAL_MODE must be 'omp' or 'direct'." >&2
+  exit 2
+fi
 
 run_step() {
   local name="$1"
@@ -31,12 +42,8 @@ if [[ -n "${OVERWRITE}" ]]; then
 fi
 
 if [[ "${SKIP_LIGHTGCN}" != "1" ]]; then
-  echo
-  echo "==> Pretrain LightGCN and export embeddings"
-  (
-    cd extract_causal_attributes/lightgcn_cf
-    "${PYTHON_BIN}" train.py --config config.yaml
-  )
+  run_step "Pretrain LightGCN and export embeddings" \
+    "${PYTHON_BIN}" extract_causal_attributes/lightgcn_cf/train.py --config "${LIGHTGCN_CONFIG}"
 fi
 
 if [[ "${SKIP_SUPPORT}" != "1" ]]; then

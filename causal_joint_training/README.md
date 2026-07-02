@@ -31,6 +31,14 @@ XRec/data/amazon/item_profile.json
 The trainer uses `trn.pkl` explanation rows that have accepted OMP causal
 labels. `total_trn_new.csv` is used as recommendation background history.
 
+For direct perturbation labels without OMP, use
+`causal_joint_training/config_direct.yaml`. It points `paths.omp_dir` at the
+direct OMP-compatible artifact directory:
+
+```text
+extract_causal_attributes/direct_perturbation/artifacts/amazon/direct_omp_compatible
+```
+
 ## Preflight
 
 Validate inputs before a long training run:
@@ -100,6 +108,12 @@ Useful overrides:
 GENERATE_SPLIT=validation bash scripts/run_joint_training.sh
 GENERATE_LIMIT=20 bash scripts/run_joint_training.sh
 SKIP_TRAIN=1 bash scripts/run_joint_training.sh
+```
+
+Train with direct perturbation labels:
+
+```bash
+CONFIG_PATH=causal_joint_training/config_direct.yaml bash scripts/run_joint_training.sh
 ```
 
 The copied `run_causal_joint_training.sh` also exists, but it regenerates

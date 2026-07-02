@@ -99,6 +99,18 @@ python evaluate_item_only_attribute_perturbation.py --help
 
 This branch is not used by the main intervention + OMP + joint-training path.
 
+## Direct Causal Selection Without OMP
+
+The aggregate project also exposes a direct mode that uses this folder's
+attribute-support perturbation scorer with standard LightGCN artifacts:
+
+```bash
+bash scripts/run_direct_causal_attributes.sh
+```
+
+It scores each target attribute by dropping its support items and measuring
+`score_drop`, then selects the top positive attributes without OMP.
+
 ## Tests
 
 ```bash

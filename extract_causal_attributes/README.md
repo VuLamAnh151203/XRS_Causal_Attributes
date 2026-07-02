@@ -4,6 +4,10 @@ This folder builds causal attribute labels for each user-item explanation pair.
 It connects item attributes, LightGCN recommendation scores, intervention
 matrices, and OMP sparse recovery.
 
+It also contains an optional direct perturbation mode that chooses causal
+attributes from direct score drops without building intervention matrices or
+running OMP.
+
 ## Main Flow
 
 ```text
@@ -98,6 +102,49 @@ extract_causal_attributes/intervention/omp/artifacts/amazon/
 
 The OMP output is the causal attribute label source for
 `causal_joint_training`.
+
+## Direct Perturbation Mode Without OMP
+
+Direct mode runs:
+
+```text
+training attribute support
+LightGCN artifacts
+-> remove support items for each candidate attribute
+-> measure score_drop
+-> choose top positive score_drop attributes
+```
+
+Run from the aggregate root:
+
+```bash
+bash scripts/run_direct_causal_attributes.sh
+```
+
+Or through the shared causal runner:
+
+```bash
+CAUSAL_MODE=direct bash scripts/run_causal_attributes.sh
+```
+
+Outputs:
+
+```text
+extract_causal_attributes/direct_perturbation/artifacts/amazon/
+|-- direct_attribute_drop_effects.json
+|-- direct_causal_attributes.jsonl
+|-- summary.json
+`-- direct_omp_compatible/
+    |-- manifest.jsonl
+    |-- summary.json
+    |-- run_config.json
+    |-- vocabulary.json
+    `-- shards/direct_vectors_000000.npz
+```
+
+`direct_causal_attributes.jsonl` is the direct causal-attribute report. The
+`direct_omp_compatible/` directory can be used by the joint trainer with
+`causal_joint_training/config_direct.yaml`.
 
 ## Full Stage Runner
 
