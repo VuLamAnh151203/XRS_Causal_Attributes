@@ -1,0 +1,65 @@
+paths:
+  id_mappings: extract_causal_attributes/lightgcn_cf/artifacts/amazon/id_mappings.json
+  user_embeddings: extract_causal_attributes/lightgcn_cf/artifacts/amazon/user_baseline_embeddings.pt
+  item_embeddings: extract_causal_attributes/lightgcn_cf/artifacts/amazon/item_baseline_embeddings.pt
+  recommendation_train: XRec/data/amazon/total_trn_new.csv
+  recommendation_validation: XRec/data/amazon/total_val_new.csv
+  recommendation_test: XRec/data/amazon/total_tst_new.csv
+  explanation_train: XRec/data/amazon/trn.pkl
+  explanation_validation: XRec/data/amazon/val.pkl
+  explanation_test: XRec/data/amazon/tst.pkl
+  user_profiles: XRec/data/amazon/user_profile.json
+  item_profiles: XRec/data/amazon/item_profile.json
+  omp_dir: extract_causal_attributes/intervention/omp/artifacts/amazon
+  vocabulary: attribute_pipeline/outputs/amazon/vocabulary.json
+  item_attribute_ids: attribute_pipeline/outputs/amazon/item_attribute_ids.json
+  attribute_embeddings: attribute_pipeline/outputs/amazon/attribute_embeddings.npz
+  output_dir: causal_joint_training/artifacts/amazon
+
+model:
+  embedding_dim: 64
+  extractor_hidden_dim: 256
+  preference_hidden_dim: 128
+  preference_dim: 64
+
+negative_sampling:
+  candidate_pool_size: 100
+  predicted_attribute_count: 5
+  similarity_threshold: 0.5
+  user_batch_size: 128
+
+generation:
+  model_name: ./Llama-2-7b-chat-hf
+  local_files_only: true
+  load_in_4bit: true
+  compute_dtype: float16
+  causal_prompt_tokens: 4
+  user_prompt_tokens: 2
+  item_prompt_tokens: 2
+  prompt_hidden_dim: 256
+  max_text_tokens: 512
+  max_new_tokens: 128
+  instruction: Explain why the user would buy the book within 50 words.
+
+training:
+  seed: 42
+  device: auto
+  omp_max_relative_residual: 0.5
+  labeled_validation_ratio: 0.1
+  causal_warmup_epochs: 5
+  joint_epochs: 10
+  recommendation_batch_size: 256
+  causal_batch_size: 128
+  generation_batch_size: 1
+  gradient_accumulation_steps: 8
+  gradient_clip_norm: 1.0
+  causal_learning_rate: 0.001
+  prompt_learning_rate: 0.0001
+  weight_decay: 0.000001
+  bpr_weight: 1.0
+  kl_weight: 1.0
+  generation_weight: 0.1
+  evaluation_user_batch_size: 128
+  alternating_update_order:
+    - recommendation
+    - generation

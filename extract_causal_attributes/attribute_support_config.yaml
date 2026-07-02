@@ -1,0 +1,35 @@
+# paths:
+#   training_pairs: XRec/data/amazon/trn.pkl
+#   item_attributes: attribute_pipeline/outputs/amazon/item_attributes_im_ex.json
+#   user_history: extract_causal_attributes/lightgcn_cf/artifacts/amazon/user_history.json
+#   id_mappings: extract_causal_attributes/lightgcn_cf/artifacts/amazon/id_mappings.json
+#   output: extract_causal_attributes/artifacts/amazon/trn_attribute_support.jsonl
+#   summary_output: extract_causal_attributes/artifacts/amazon/trn_attribute_support.summary.json
+
+# semantic_similarity:
+#   model_name: BAAI/bge-base-en-v1.5
+#   threshold: 0.7
+#   batch_size: 1024
+#   device: auto
+
+# runtime:
+#   comparison_chunk_size: 4096
+#   comparison_cache_max_entries: 250000
+
+paths:
+  training_pairs: XRec/data/amazon/tst.pkl
+  item_attributes: attribute_pipeline/outputs/amazon/item_attributes_im_ex.json
+  user_history: extract_causal_attributes/lightgcn_cf/artifacts/amazon/user_history.json
+  id_mappings: extract_causal_attributes/lightgcn_cf/artifacts/amazon/id_mappings.json
+  output: extract_causal_attributes/artifacts/amazon/tst_attribute_support.jsonl
+  summary_output: extract_causal_attributes/artifacts/amazon/tst_attribute_support.summary.json
+
+semantic_similarity:
+  model_name: BAAI/bge-base-en-v1.5
+  threshold: 0.7
+  batch_size: 1024
+  device: auto
+
+runtime:
+  comparison_chunk_size: 4096
+  comparison_cache_max_entries: 250000

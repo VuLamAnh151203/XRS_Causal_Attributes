@@ -1,0 +1,23 @@
+dataset_name: amazon
+train_csv: ../../XRec/data/amazon/total_trn_new.csv
+validation_csv: ../../XRec/data/amazon/total_val_new.csv
+artifact_dir: artifacts/amazon_item_only
+model_variant: item_only_fixed_random_users
+
+# Confirmed from XRec/data/amazon/total_{trn,val}_new.csv.
+user_column: user
+item_column: item
+
+embedding_dim: 64
+num_layers: 2
+batch_size: 4096
+learning_rate: 0.001
+l2_regularization: 0.0001
+epochs: 300
+early_stopping_patience: 20
+evaluation_every: 5
+evaluation_user_batch_size: 1024
+seed: 42
+device: auto
+recall_k: [10, 20]
+ndcg_k: 20

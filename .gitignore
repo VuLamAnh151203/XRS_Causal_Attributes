@@ -1,0 +1,38 @@
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Local environments and secrets
+.env
+.venv/
+venv/
+
+# Generated pipeline artifacts after bundled Step 1
+extract_causal_attributes/artifacts/
+extract_causal_attributes/lightgcn_cf/artifacts/
+extract_causal_attributes/intervention/artifacts/
+extract_causal_attributes/intervention/omp/artifacts/
+causal_joint_training/artifacts/
+
+# External datasets and local model weights
+XRec/
+models/
+Llama-2-7b-chat-hf/
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.pkl
+*.npz
+
+# Keep the bundled Step 1 attribute artifacts.
+!attribute_pipeline/outputs/
+!attribute_pipeline/outputs/**
+!attribute_pipeline/outputs/**/*.npz
+
+# Archives and notebooks
+*.zip
+*.tar
+*.tar.gz
+*.ipynb_checkpoints/

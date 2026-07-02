@@ -1,0 +1,14 @@
+paths:
+  intervention_dir: extract_causal_attributes/intervention/artifacts/amazon
+  output_dir: extract_causal_attributes/intervention/omp/artifacts/amazon
+
+omp:
+  sparsity_level: 5
+  minimum_intervention_multiplier: 2
+  require_strictly_more_than_minimum: true
+  correlation_tolerance: 1.0e-12
+  residual_tolerance: 1.0e-10
+
+runtime:
+  pairs_per_shard: 100
+  source_shard_cache_max_entries: 8

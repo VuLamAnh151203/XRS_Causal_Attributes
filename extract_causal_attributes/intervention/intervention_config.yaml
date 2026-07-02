@@ -1,0 +1,49 @@
+# paths:
+#   attribute_support: extract_causal_attributes/artifacts/amazon/trn_attribute_support.jsonl
+#   vocabulary: attribute_pipeline/outputs/amazon/vocabulary.json
+#   user_history: extract_causal_attributes/lightgcn_cf/artifacts/amazon/user_history.json
+#   id_mappings: extract_causal_attributes/lightgcn_cf/artifacts/amazon/id_mappings.json
+#   user_ego_embeddings: extract_causal_attributes/lightgcn_cf/artifacts/amazon/user_ego_embeddings.pt
+#   item_ego_embeddings: extract_causal_attributes/lightgcn_cf/artifacts/amazon/item_ego_embeddings.pt
+#   lightgcn_config: extract_causal_attributes/lightgcn_cf/config.yaml
+#   output_dir: extract_causal_attributes/intervention/artifacts/amazon
+
+# interventions:
+#   sparsity_level: 5
+#   sample_multiplier: 3
+#   max_history_drop_fraction: 0.50
+#   subset_probability: 0.50
+#   random_seed: 42
+#   exhaustive_attribute_limit: 20
+#   max_sampling_attempts: 10000
+
+# runtime:
+#   # Supported examples: auto, cpu, cuda, cuda:0, cuda:1
+#   device: cuda:0
+#   pairs_per_shard: 100
+#   score_cache_max_entries: 100000
+
+paths:
+  attribute_support: extract_causal_attributes/artifacts/amazon/tst_attribute_support.jsonl
+  vocabulary: attribute_pipeline/outputs/amazon/vocabulary.json
+  user_history: extract_causal_attributes/lightgcn_cf/artifacts/amazon/user_history.json
+  id_mappings: extract_causal_attributes/lightgcn_cf/artifacts/amazon/id_mappings.json
+  user_ego_embeddings: extract_causal_attributes/lightgcn_cf/artifacts/amazon/user_ego_embeddings.pt
+  item_ego_embeddings: extract_causal_attributes/lightgcn_cf/artifacts/amazon/item_ego_embeddings.pt
+  lightgcn_config: extract_causal_attributes/lightgcn_cf/config.yaml
+  output_dir: extract_causal_attributes/intervention/artifacts/amazon_tst
+
+interventions:
+  sparsity_level: 5
+  sample_multiplier: 3
+  max_history_drop_fraction: 0.50
+  subset_probability: 0.50
+  random_seed: 42
+  exhaustive_attribute_limit: 20
+  max_sampling_attempts: 10000
+
+runtime:
+  # Supported examples: auto, cpu, cuda, cuda:0, cuda:1
+  device: cuda:0
+  pairs_per_shard: 100
+  score_cache_max_entries: 100000

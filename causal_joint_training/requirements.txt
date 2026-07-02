@@ -1,0 +1,7 @@
+numpy
+pandas
+PyYAML
+torch
+transformers
+accelerate
+bitsandbytes

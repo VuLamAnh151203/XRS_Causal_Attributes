@@ -1,0 +1,7 @@
+{
+  "model": "BAAI/bge-base-en-v1.5",
+  "attribute_count": 29607,
+  "batch_size": 64,
+  "normalized_embeddings": true,
+  "created_at": "2026-06-01T06:11:22.607242+00:00"
+}

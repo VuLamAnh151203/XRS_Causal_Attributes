@@ -1,0 +1,6 @@
+-r attribute_pipeline/requirements.txt
+-r extract_causal_attributes/requirements-attribute-support.txt
+-r extract_causal_attributes/lightgcn_cf/requirements.txt
+-r extract_causal_attributes/intervention/requirements.txt
+-r extract_causal_attributes/intervention/omp/requirements.txt
+-r causal_joint_training/requirements.txt
